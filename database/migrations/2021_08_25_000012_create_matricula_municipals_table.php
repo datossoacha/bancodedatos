@@ -10,6 +10,10 @@ class CreateMatriculaMunicipalsTable extends Migration
     {
         Schema::create('matricula_municipals', function (Blueprint $table) {
             $table->bigIncrements('id');
+            $table->string('sector')->nullable();
+            $table->string('institucion')->nullable();
+            $table->string('sede')->nullable();
+            $table->string('jornada')->nullable();
             $table->integer('grado_0')->nullable();
             $table->integer('grado_1')->nullable();
             $table->integer('grado_2')->nullable();

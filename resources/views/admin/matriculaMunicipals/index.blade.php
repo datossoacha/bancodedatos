@@ -29,10 +29,19 @@
                         {{ trans('cruds.matriculaMunicipal.fields.id') }}
                     </th>
                     <th>
+                        {{ trans('cruds.matriculaMunicipal.fields.sector') }}
+                    </th>
+                    <th>
+                        {{ trans('cruds.matriculaMunicipal.fields.institucion') }}
+                    </th>
+                    <th>
                         {{ trans('cruds.matriculaMunicipal.fields.sede') }}
                     </th>
                     <th>
                         {{ trans('cruds.matriculaMunicipal.fields.jornada') }}
+                    </th>
+                    <th>
+                        {{ trans('cruds.matriculaMunicipal.fields.comuna') }}
                     </th>
                     <th>
                         {{ trans('cruds.matriculaMunicipal.fields.grado_0') }}
@@ -142,8 +151,11 @@
     columns: [
       { data: 'placeholder', name: 'placeholder' },
 { data: 'id', name: 'id' },
-{ data: 'sede_nombre', name: 'sede.nombre' },
-{ data: 'jornada_nombre', name: 'jornada.nombre' },
+{ data: 'sector', name: 'sector' },
+{ data: 'institucion', name: 'institucion' },
+{ data: 'sede', name: 'sede' },
+{ data: 'jornada', name: 'jornada' },
+{ data: 'comuna_nombre', name: 'comuna.nombre' },
 { data: 'grado_0', name: 'grado_0' },
 { data: 'grado_1', name: 'grado_1' },
 { data: 'grado_2', name: 'grado_2' },

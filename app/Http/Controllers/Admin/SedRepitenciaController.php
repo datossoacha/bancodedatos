@@ -10,16 +10,55 @@ use App\Models\SedRepitencium;
 use Gate;
 use Illuminate\Http\Request;
 use Symfony\Component\HttpFoundation\Response;
+use Yajra\DataTables\Facades\DataTables;
 
 class SedRepitenciaController extends Controller
 {
-    public function index()
+    public function index(Request $request)
     {
         abort_if(Gate::denies('sed_repitencium_access'), Response::HTTP_FORBIDDEN, '403 Forbidden');
 
-        $sedRepitencia = SedRepitencium::all();
+        if ($request->ajax()) {
+            $query = SedRepitencium::query()->select(sprintf('%s.*', (new SedRepitencium())->table));
+            $table = Datatables::of($query);
 
-        return view('admin.sedRepitencia.index', compact('sedRepitencia'));
+            $table->addColumn('placeholder', '&nbsp;');
+            $table->addColumn('actions', '&nbsp;');
+
+            $table->editColumn('actions', function ($row) {
+                $viewGate = 'sed_repitencium_show';
+                $editGate = 'sed_repitencium_edit';
+                $deleteGate = 'sed_repitencium_delete';
+                $crudRoutePart = 'sed-repitencia';
+
+                return view('partials.datatablesActions', compact(
+                'viewGate',
+                'editGate',
+                'deleteGate',
+                'crudRoutePart',
+                'row'
+            ));
+            });
+
+            $table->editColumn('id', function ($row) {
+                return $row->id ? $row->id : '';
+            });
+            $table->editColumn('poblacion', function ($row) {
+                return $row->poblacion ? $row->poblacion : '';
+            });
+            $table->editColumn('matricula', function ($row) {
+                return $row->matricula ? $row->matricula : '';
+            });
+            $table->editColumn('repitencia', function ($row) {
+                return $row->repitencia ? $row->repitencia : '';
+            });
+
+            $table->rawColumns(['actions', 'placeholder']);
+
+            return $table->make(true);
+        }
+
+        return view('admin.sedRepitencia.index');
     }
 
     public function create()

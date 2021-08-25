@@ -14,6 +14,11 @@ class MatriculaMunicipal extends Model
     use Auditable;
     use HasFactory;
 
+    public const SECTOR_SELECT = [
+        'OFICIAL' => 'OFICIAL',
+        'PRIVADO' => 'PRIVADO',
+    ];
+
     public $table = 'matricula_municipals';
 
     protected $dates = [
@@ -23,8 +28,11 @@ class MatriculaMunicipal extends Model
     ];
 
     protected $fillable = [
-        'sede_id',
-        'jornada_id',
+        'sector',
+        'institucion',
+        'sede',
+        'jornada',
+        'comuna_id',
         'grado_0',
         'grado_1',
         'grado_2',
@@ -47,14 +55,9 @@ class MatriculaMunicipal extends Model
         'deleted_at',
     ];
 
-    public function sede()
+    public function comuna()
     {
-        return $this->belongsTo(Sede::class, 'sede_id');
-    }
-
-    public function jornada()
-    {
-        return $this->belongsTo(Jornada::class, 'jornada_id');
+        return $this->belongsTo(Comuna::class, 'comuna_id');
     }
 
     protected function serializeDate(DateTimeInterface $date)
