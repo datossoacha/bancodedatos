@@ -10,12 +10,33 @@
         <form method="POST" action="{{ route("admin.matricula-municipals.store") }}" enctype="multipart/form-data">
             @csrf
             <div class="form-group">
-                <label for="sede_id">{{ trans('cruds.matriculaMunicipal.fields.sede') }}</label>
-                <select class="form-control select2 {{ $errors->has('sede') ? 'is-invalid' : '' }}" name="sede_id" id="sede_id">
-                    @foreach($sedes as $id => $entry)
-                        <option value="{{ $id }}" {{ old('sede_id') == $id ? 'selected' : '' }}>{{ $entry }}</option>
+                <label>{{ trans('cruds.matriculaMunicipal.fields.sector') }}</label>
+                <select class="form-control {{ $errors->has('sector') ? 'is-invalid' : '' }}" name="sector" id="sector">
+                    <option value disabled {{ old('sector', null) === null ? 'selected' : '' }}>{{ trans('global.pleaseSelect') }}</option>
+                    @foreach(App\Models\MatriculaMunicipal::SECTOR_SELECT as $key => $label)
+                        <option value="{{ $key }}" {{ old('sector', '') === (string) $key ? 'selected' : '' }}>{{ $label }}</option>
                     @endforeach
                 </select>
+                @if($errors->has('sector'))
+                    <div class="invalid-feedback">
+                        {{ $errors->first('sector') }}
+                    </div>
+                @endif
+                <span class="help-block">{{ trans('cruds.matriculaMunicipal.fields.sector_helper') }}</span>
+            </div>
+            <div class="form-group">
+                <label for="institucion">{{ trans('cruds.matriculaMunicipal.fields.institucion') }}</label>
+                <input class="form-control {{ $errors->has('institucion') ? 'is-invalid' : '' }}" type="text" name="institucion" id="institucion" value="{{ old('institucion', '') }}">
+                @if($errors->has('institucion'))
+                    <div class="invalid-feedback">
+                        {{ $errors->first('institucion') }}
+                    </div>
+                @endif
+                <span class="help-block">{{ trans('cruds.matriculaMunicipal.fields.institucion_helper') }}</span>
+            </div>
+            <div class="form-group">
+                <label for="sede">{{ trans('cruds.matriculaMunicipal.fields.sede') }}</label>
+                <input class="form-control {{ $errors->has('sede') ? 'is-invalid' : '' }}" type="text" name="sede" id="sede" value="{{ old('sede', '') }}">
                 @if($errors->has('sede'))
                     <div class="invalid-feedback">
                         {{ $errors->first('sede') }}
@@ -24,18 +45,28 @@
                 <span class="help-block">{{ trans('cruds.matriculaMunicipal.fields.sede_helper') }}</span>
             </div>
             <div class="form-group">
-                <label for="jornada_id">{{ trans('cruds.matriculaMunicipal.fields.jornada') }}</label>
-                <select class="form-control select2 {{ $errors->has('jornada') ? 'is-invalid' : '' }}" name="jornada_id" id="jornada_id">
-                    @foreach($jornadas as $id => $entry)
-                        <option value="{{ $id }}" {{ old('jornada_id') == $id ? 'selected' : '' }}>{{ $entry }}</option>
-                    @endforeach
-                </select>
+                <label for="jornada">{{ trans('cruds.matriculaMunicipal.fields.jornada') }}</label>
+                <input class="form-control {{ $errors->has('jornada') ? 'is-invalid' : '' }}" type="text" name="jornada" id="jornada" value="{{ old('jornada', '') }}">
                 @if($errors->has('jornada'))
                     <div class="invalid-feedback">
                         {{ $errors->first('jornada') }}
                     </div>
                 @endif
                 <span class="help-block">{{ trans('cruds.matriculaMunicipal.fields.jornada_helper') }}</span>
+            </div>
+            <div class="form-group">
+                <label for="comuna_id">{{ trans('cruds.matriculaMunicipal.fields.comuna') }}</label>
+                <select class="form-control select2 {{ $errors->has('comuna') ? 'is-invalid' : '' }}" name="comuna_id" id="comuna_id">
+                    @foreach($comunas as $id => $entry)
+                        <option value="{{ $id }}" {{ old('comuna_id') == $id ? 'selected' : '' }}>{{ $entry }}</option>
+                    @endforeach
+                </select>
+                @if($errors->has('comuna'))
+                    <div class="invalid-feedback">
+                        {{ $errors->first('comuna') }}
+                    </div>
+                @endif
+                <span class="help-block">{{ trans('cruds.matriculaMunicipal.fields.comuna_helper') }}</span>
             </div>
             <div class="form-group">
                 <label for="grado_0">{{ trans('cruds.matriculaMunicipal.fields.grado_0') }}</label>

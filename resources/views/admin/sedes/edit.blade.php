@@ -41,8 +41,8 @@
                     <span class="btn btn-info btn-xs deselect-all" style="border-radius: 0">{{ trans('global.deselect_all') }}</span>
                 </div>
                 <select class="form-control select2 {{ $errors->has('jornadas') ? 'is-invalid' : '' }}" name="jornadas[]" id="jornadas" multiple required>
-                    @foreach($jornadas as $id => $jornadas)
-                        <option value="{{ $id }}" {{ (in_array($id, old('jornadas', [])) || $sede->jornadas->contains($id)) ? 'selected' : '' }}>{{ $jornadas }}</option>
+                    @foreach($jornadas as $id => $jornada)
+                        <option value="{{ $id }}" {{ (in_array($id, old('jornadas', [])) || $sede->jornadas->contains($id)) ? 'selected' : '' }}>{{ $jornada }}</option>
                     @endforeach
                 </select>
                 @if($errors->has('jornadas'))

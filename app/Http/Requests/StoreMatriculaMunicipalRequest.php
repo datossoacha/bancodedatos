@@ -17,6 +17,18 @@ class StoreMatriculaMunicipalRequest extends FormRequest
     public function rules()
     {
         return [
+            'institucion' => [
+                'string',
+                'nullable',
+            ],
+            'sede' => [
+                'string',
+                'nullable',
+            ],
+            'jornada' => [
+                'string',
+                'nullable',
+            ],
             'grado_0' => [
                 'nullable',
                 'integer',

@@ -7,9 +7,8 @@ use App\Http\Controllers\Traits\CsvImportTrait;
 use App\Http\Requests\MassDestroyMatriculaMunicipalRequest;
 use App\Http\Requests\StoreMatriculaMunicipalRequest;
 use App\Http\Requests\UpdateMatriculaMunicipalRequest;
-use App\Models\Jornada;
+use App\Models\Comuna;
 use App\Models\MatriculaMunicipal;
-use App\Models\Sede;
 use Gate;
 use Illuminate\Http\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -24,7 +23,7 @@ class MatriculaMunicipalController extends Controller
         abort_if(Gate::denies('matricula_municipal_access'), Response::HTTP_FORBIDDEN, '403 Forbidden');
 
         if ($request->ajax()) {
-            $query = MatriculaMunicipal::with(['sede', 'jornada'])->select(sprintf('%s.*', (new MatriculaMunicipal())->table));
+            $query = MatriculaMunicipal::with(['comuna'])->select(sprintf('%s.*', (new MatriculaMunicipal())->table));
             $table = Datatables::of($query);
 
             $table->addColumn('placeholder', '&nbsp;');
@@ -48,12 +47,20 @@ class MatriculaMunicipalController extends Controller
             $table->editColumn('id', function ($row) {
                 return $row->id ? $row->id : '';
             });
-            $table->addColumn('sede_nombre', function ($row) {
-                return $row->sede ? $row->sede->nombre : '';
+            $table->editColumn('sector', function ($row) {
+                return $row->sector ? MatriculaMunicipal::SECTOR_SELECT[$row->sector] : '';
             });
-
-            $table->addColumn('jornada_nombre', function ($row) {
-                return $row->jornada ? $row->jornada->nombre : '';
+            $table->editColumn('institucion', function ($row) {
+                return $row->institucion ? $row->institucion : '';
+            });
+            $table->editColumn('sede', function ($row) {
+                return $row->sede ? $row->sede : '';
+            });
+            $table->editColumn('jornada', function ($row) {
+                return $row->jornada ? $row->jornada : '';
+            });
+            $table->addColumn('comuna_nombre', function ($row) {
+                return $row->comuna ? $row->comuna->nombre : '';
             });
 
             $table->editColumn('grado_0', function ($row) {
@@ -108,7 +115,7 @@ class MatriculaMunicipalController extends Controller
                 return $row->grado_99 ? $row->grado_99 : '';
             });
 
-            $table->rawColumns(['actions', 'placeholder', 'sede', 'jornada']);
+            $table->rawColumns(['actions', 'placeholder', 'comuna']);
 
             return $table->make(true);
         }
@@ -120,11 +127,9 @@ class MatriculaMunicipalController extends Controller
     {
         abort_if(Gate::denies('matricula_municipal_create'), Response::HTTP_FORBIDDEN, '403 Forbidden');
 
-        $sedes = Sede::all()->pluck('nombre', 'id')->prepend(trans('global.pleaseSelect'), '');
+        $comunas = Comuna::pluck('nombre', 'id')->prepend(trans('global.pleaseSelect'), '');
 
-        $jornadas = Jornada::all()->pluck('nombre', 'id')->prepend(trans('global.pleaseSelect'), '');
-
-        return view('admin.matriculaMunicipals.create', compact('sedes', 'jornadas'));
+        return view('admin.matriculaMunicipals.create', compact('comunas'));
     }
 
     public function store(StoreMatriculaMunicipalRequest $request)
@@ -138,13 +143,11 @@ class MatriculaMunicipalController extends Controller
     {
         abort_if(Gate::denies('matricula_municipal_edit'), Response::HTTP_FORBIDDEN, '403 Forbidden');
 
-        $sedes = Sede::all()->pluck('nombre', 'id')->prepend(trans('global.pleaseSelect'), '');
+        $comunas = Comuna::pluck('nombre', 'id')->prepend(trans('global.pleaseSelect'), '');
 
-        $jornadas = Jornada::all()->pluck('nombre', 'id')->prepend(trans('global.pleaseSelect'), '');
+        $matriculaMunicipal->load('comuna');
 
-        $matriculaMunicipal->load('sede', 'jornada');
-
-        return view('admin.matriculaMunicipals.edit', compact('sedes', 'jornadas', 'matriculaMunicipal'));
+        return view('admin.matriculaMunicipals.edit', compact('comunas', 'matriculaMunicipal'));
     }
 
     public function update(UpdateMatriculaMunicipalRequest $request, MatriculaMunicipal $matriculaMunicipal)
@@ -158,7 +161,7 @@ class MatriculaMunicipalController extends Controller
     {
         abort_if(Gate::denies('matricula_municipal_show'), Response::HTTP_FORBIDDEN, '403 Forbidden');
 
-        $matriculaMunicipal->load('sede', 'jornada');
+        $matriculaMunicipal->load('comuna');
 
         return view('admin.matriculaMunicipals.show', compact('matriculaMunicipal'));
     }

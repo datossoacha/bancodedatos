@@ -76,9 +76,9 @@ class SedeController extends Controller
     {
         abort_if(Gate::denies('sede_create'), Response::HTTP_FORBIDDEN, '403 Forbidden');
 
-        $institucions = Institucione::all()->pluck('nombre_institucion', 'id')->prepend(trans('global.pleaseSelect'), '');
+        $institucions = Institucione::pluck('nombre_institucion', 'id')->prepend(trans('global.pleaseSelect'), '');
 
-        $jornadas = Jornada::all()->pluck('nombre', 'id');
+        $jornadas = Jornada::pluck('nombre', 'id');
 
         return view('admin.sedes.create', compact('institucions', 'jornadas'));
     }
@@ -95,9 +95,9 @@ class SedeController extends Controller
     {
         abort_if(Gate::denies('sede_edit'), Response::HTTP_FORBIDDEN, '403 Forbidden');
 
-        $institucions = Institucione::all()->pluck('nombre_institucion', 'id')->prepend(trans('global.pleaseSelect'), '');
+        $institucions = Institucione::pluck('nombre_institucion', 'id')->prepend(trans('global.pleaseSelect'), '');
 
-        $jornadas = Jornada::all()->pluck('nombre', 'id');
+        $jornadas = Jornada::pluck('nombre', 'id');
 
         $sede->load('institucion', 'jornadas');
 

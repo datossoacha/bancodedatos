@@ -10,16 +10,52 @@ use App\Models\Departamento;
 use Gate;
 use Illuminate\Http\Request;
 use Symfony\Component\HttpFoundation\Response;
+use Yajra\DataTables\Facades\DataTables;
 
 class DepartamentosController extends Controller
 {
-    public function index()
+    public function index(Request $request)
     {
         abort_if(Gate::denies('departamento_access'), Response::HTTP_FORBIDDEN, '403 Forbidden');
 
-        $departamentos = Departamento::all();
+        if ($request->ajax()) {
+            $query = Departamento::query()->select(sprintf('%s.*', (new Departamento())->table));
+            $table = Datatables::of($query);
 
-        return view('admin.departamentos.index', compact('departamentos'));
+            $table->addColumn('placeholder', '&nbsp;');
+            $table->addColumn('actions', '&nbsp;');
+
+            $table->editColumn('actions', function ($row) {
+                $viewGate = 'departamento_show';
+                $editGate = 'departamento_edit';
+                $deleteGate = 'departamento_delete';
+                $crudRoutePart = 'departamentos';
+
+                return view('partials.datatablesActions', compact(
+                'viewGate',
+                'editGate',
+                'deleteGate',
+                'crudRoutePart',
+                'row'
+            ));
+            });
+
+            $table->editColumn('id', function ($row) {
+                return $row->id ? $row->id : '';
+            });
+            $table->editColumn('name', function ($row) {
+                return $row->name ? $row->name : '';
+            });
+            $table->editColumn('code', function ($row) {
+                return $row->code ? $row->code : '';
+            });
+
+            $table->rawColumns(['actions', 'placeholder']);
+
+            return $table->make(true);
+        }
+
+        return view('admin.departamentos.index');
     }
 
     public function create()

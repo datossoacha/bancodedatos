@@ -25,10 +25,26 @@
                     </tr>
                     <tr>
                         <th>
+                            {{ trans('cruds.matriculaMunicipal.fields.sector') }}
+                        </th>
+                        <td>
+                            {{ App\Models\MatriculaMunicipal::SECTOR_SELECT[$matriculaMunicipal->sector] ?? '' }}
+                        </td>
+                    </tr>
+                    <tr>
+                        <th>
+                            {{ trans('cruds.matriculaMunicipal.fields.institucion') }}
+                        </th>
+                        <td>
+                            {{ $matriculaMunicipal->institucion }}
+                        </td>
+                    </tr>
+                    <tr>
+                        <th>
                             {{ trans('cruds.matriculaMunicipal.fields.sede') }}
                         </th>
                         <td>
-                            {{ $matriculaMunicipal->sede->nombre ?? '' }}
+                            {{ $matriculaMunicipal->sede }}
                         </td>
                     </tr>
                     <tr>
@@ -36,7 +52,15 @@
                             {{ trans('cruds.matriculaMunicipal.fields.jornada') }}
                         </th>
                         <td>
-                            {{ $matriculaMunicipal->jornada->nombre ?? '' }}
+                            {{ $matriculaMunicipal->jornada }}
+                        </td>
+                    </tr>
+                    <tr>
+                        <th>
+                            {{ trans('cruds.matriculaMunicipal.fields.comuna') }}
+                        </th>
+                        <td>
+                            {{ $matriculaMunicipal->comuna->nombre ?? '' }}
                         </td>
                     </tr>
                     <tr>
